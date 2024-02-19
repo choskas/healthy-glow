@@ -12,6 +12,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+
 export default function Index() {
   return (
     <body className="leading-normal tracking-normal text-white gradient">
