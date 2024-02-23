@@ -1,5 +1,5 @@
 import stylesheet from "~/tailwind.css";
-import generalStyleSheet from './styles/index.css'
+import generalStyleSheet from "./styles/index.css";
 import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
@@ -10,6 +10,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import { Toaster } from "./components/ui/toaster";
+import NavBar from "./components/commons/NavBar";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -26,6 +27,7 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <NavBar />
         <Outlet />
         <ScrollRestoration />
         <Scripts />

@@ -35,12 +35,11 @@ export const action = async ({
 
 export default function Index() {
   return (
-    <body className="leading-normal tracking-normal text-white">
-      <NavBar />
+    <main className="leading-normal tracking-normal text-white">
       <MainSection />
       <PropertiesSection />
       <PricingSection />
       <Footer />
-    </body>
+    </main>
   );
 }

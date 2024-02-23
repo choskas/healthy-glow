@@ -1,52 +1,33 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { FormEvent, FormEventHandler, useEffect, useState } from "react";
+import { ActionFunctionArgs } from "@remix-run/node";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
+import { ColumnDef } from "@tanstack/react-table";
+import { useEffect, useState } from "react";
 import { CustomTable } from "~/components/commons/CustomTable";
 import { RegisteredUserT } from "~/components/landing/main-section/types";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import db from "~/utils/db";
 import { users } from "~/utils/db/schema";
 
+export const action = async ({ params, request }: ActionFunctionArgs) => {
+  const body = Object.fromEntries(await request.formData());
 
-export const action = async ({
-    params,
-    request,
-  }: ActionFunctionArgs) => {
-    const body = Object.fromEntries( await request.formData())
-
-    if (body.password === 'admin123') {
-        const results = await db
-        .select({
-          name: users.name,
-          lastName: users.lastName,
-          email: users.email,
-          phone: users.phone,
-          doctorCode: users.doctorCode,
-        })
-        .from(users);
-        return {status: 200, results}
-    }
-    return {status: 401}
-
-  };
+  if (body.password === "admin123") {
+    const results = await db
+      .select({
+        name: users.name,
+        lastName: users.lastName,
+        email: users.email,
+        phone: users.phone,
+        doctorCode: users.doctorCode,
+      })
+      .from(users);
+    return { status: 200, results };
+  }
+  return { status: 401 };
+};
 
 const columns: ColumnDef<RegisteredUserT>[] = [
   {
@@ -72,13 +53,19 @@ const columns: ColumnDef<RegisteredUserT>[] = [
 ];
 
 const Users = () => {
-  const actionData = useActionData<{status: number, results?: RegisteredUserT[]}>()
+  const actionData = useActionData<{
+    status: number;
+    results?: RegisteredUserT[];
+  }>();
+  const navigation = useNavigation();
   const [isValid, setIsValid] = useState(false);
+
   useEffect(() => {
     if (actionData?.status === 200) {
-        setIsValid(true)
+      setIsValid(true);
     }
-  }, [actionData])
+  }, [actionData]);
+
   if (!isValid) {
     return (
       <Form
@@ -88,7 +75,14 @@ const Users = () => {
         <div className="w-[200px]">
           <Label className="mb-[12px]">Introduce el password:</Label>
           <Input name="password" type="password" />
-          <Button type="submit" className="mt-[12px] w-full">
+          <Button
+            disabled={navigation.state === "submitting"}
+            type="submit"
+            className="mt-[12px] w-full"
+          >
+            {navigation.state === "submitting" && (
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            )}
             Entrar
           </Button>
         </div>
@@ -97,8 +91,11 @@ const Users = () => {
   }
 
   return (
-    <section className="md:px-[48px] md:py-[24px]">
-      <CustomTable data={actionData && actionData.results ? actionData?.results : []} columns={columns} />
+    <section className="md:px-[48px] md:py-[24px] mt-[96px]">
+      <CustomTable
+        data={actionData && actionData.results ? actionData?.results : []}
+        columns={columns}
+      />
     </section>
   );
 };
