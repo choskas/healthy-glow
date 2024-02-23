@@ -6,10 +6,12 @@ export const registerFormSchema = z.object({
   email: z.string().email("Introduce un email válido"),
   phone: z
     .string()
+    .regex(/^\d+$/, "Solo puede contener números")
     .min(10, "Tu número de télefono debe de ser de 10 digitos")
     .max(10, "Tu número de télefono debe de ser de 10 digitos"),
   doctorCode: z
     .string()
+    .regex(/^\d+$/, "Solo puede contener números")
     .min(4, "El código es de minimo 4 digitos")
     .max(5, "El código es inválido"),
 });

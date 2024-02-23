@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,8 +7,24 @@ import {
   DialogTrigger,
 } from "../../ui/dialog";
 import RegisterForm from "./RegisterForm";
+import { useActionData } from "@remix-run/react";
+import { useToast } from "~/components/ui/use-toast";
 
 const MainSection = () => {
+  const actionData = useActionData<RegisterActionData>()
+  const { toast } = useToast()
+  const [isOpen, setIsOpen] = useState(false)
+  useEffect(() => {
+    if (actionData?.status === 200) {
+      setIsOpen(false)
+      toast({
+        title: "Tu información se ha enviado.",
+        description: "Pronto nos pondremos en contacto contigo.",
+       
+      })
+    }
+  }, [actionData?.status])
+  
   return (
     <div className="gradient">
       <div className="pt-24">
@@ -22,14 +39,14 @@ const MainSection = () => {
             <p className="leading-normal text-2xl mb-8">
               Frase para atraer gente :v Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </p>
-            <Dialog>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
-                <button id="register-button" className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                <button onClick={() => setIsOpen(!isOpen)} id="register-button" className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
                   Solicitalo ahora
                 </button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
-                <DialogDescription>
+                <DialogDescription >
                   Llena los datos de este formulario y pronto nos contactaremos
                   contigo.
                 </DialogDescription>

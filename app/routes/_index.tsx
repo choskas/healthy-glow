@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, json } from "@remix-run/node";
 import type { MetaFunction } from "@remix-run/node";
 import Footer from "~/components/landing/Footer";
 import MainSection from "~/components/landing/main-section/MainSection";
@@ -8,6 +8,8 @@ import PropertiesSection from "~/components/landing/PropertiesSection";
 import {z} from 'zod'
 import { validateAction } from "~/utils/validators/zod";
 import { registerFormSchema } from "~/utils/forms-schemas/landing";
+import db from "~/utils/db";
+import { users } from "~/utils/db/schema";
 export const meta: MetaFunction = () => {
   return [
     { title: "Healthy Glow" },
@@ -22,12 +24,13 @@ export const action = async ({
     const {formData, errors} = await validateAction(request, registerFormSchema)
     if (errors) {
       return {
-        errors
+        errors,
+        status: 400
       }
     }
-   
-    
-    return {}
+
+    const response = await db.insert(users).values(formData)
+    return json({response, status: 200})
   };
 
 export default function Index() {
