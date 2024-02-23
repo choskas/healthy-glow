@@ -10,7 +10,8 @@
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc",
     "generate": "drizzle-kit generate:sqlite",
-    "migrate": "drizzle-kit push:sqlite"
+    "migrate": "drizzle-kit push:sqlite",
+    "deploy": "fly deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -37,6 +38,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.2",
     "@remix-run/dev": "^2.6.0",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
