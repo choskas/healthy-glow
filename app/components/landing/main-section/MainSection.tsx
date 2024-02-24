@@ -9,6 +9,7 @@ import {
 import RegisterForm from "./RegisterForm";
 import { useActionData } from "@remix-run/react";
 import { useToast } from "~/components/ui/use-toast";
+import SimulatorCard from "~/components/commons/simulator-card";
 
 const MainSection = () => {
   const actionData = useActionData<RegisterActionData>()
@@ -29,7 +30,7 @@ const MainSection = () => {
     <div className="gradient">
       <div className="pt-24">
         <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-          <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
+          <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left mt-[24px] md:mt-0">
             <p className="uppercase tracking-loose w-full">
               A que nos dedicamos
             </p>
@@ -41,7 +42,7 @@ const MainSection = () => {
             </p>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
-                <button onClick={() => setIsOpen(!isOpen)} id="register-button" className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                <button onClick={() => setIsOpen(!isOpen)} id="register-button" className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out hidden">
                   Solicitalo ahora
                 </button>
               </DialogTrigger>
@@ -55,12 +56,8 @@ const MainSection = () => {
             </Dialog>
           </div>
 
-          <div className="w-full md:w-3/5 py-6 text-center flex justify-end">
-            <img
-              alt="logo"
-              className="w-full md:w-4/5 z-1"
-              src="/imgs/landing/main-image.png"
-            />
+          <div className="w-full md:w-3/5 py-6 text-center flex justify-end mb-[24px]">
+          <SimulatorCard />
           </div>
         </div>
       </div>

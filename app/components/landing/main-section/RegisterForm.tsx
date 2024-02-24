@@ -1,4 +1,4 @@
-import { Form as RemixForm, useActionData} from "@remix-run/react";
+import { Form as RemixForm, useActionData, useParams, useSearchParams} from "@remix-run/react";
 import {
   Form,
   FormControl,
@@ -15,6 +15,7 @@ import { z } from "zod";
 import { registerFormSchema } from "~/utils/forms-schemas/landing";
 
 const RegisterForm = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
     const form = useForm<z.infer<typeof registerFormSchema>>({
         resolver: zodResolver(registerFormSchema),
         defaultValues: {
@@ -22,7 +23,7 @@ const RegisterForm = () => {
           lastName: "",
           email: "",
           phone: "",
-          doctorCode: ""
+          doctorCode: "",
         },
       });
 

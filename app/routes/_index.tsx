@@ -5,7 +5,7 @@ import MainSection from "~/components/landing/main-section/MainSection";
 import NavBar from "~/components/commons/NavBar";
 import PricingSection from "~/components/landing/PricingSection";
 import PropertiesSection from "~/components/landing/PropertiesSection";
-import {z} from 'zod'
+import { z } from "zod";
 import { validateAction } from "~/utils/validators/zod";
 import { registerFormSchema } from "~/utils/forms-schemas/landing";
 import db from "~/utils/db";
@@ -17,21 +17,28 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const action = async ({
-    params,
+export const action = async ({ params, request }: ActionFunctionArgs) => {
+  const { formData, errors } = await validateAction(
     request,
-  }: ActionFunctionArgs) => {
-    const {formData, errors} = await validateAction(request, registerFormSchema)
-    if (errors) {
-      return {
-        errors,
-        status: 400
-      }
-    }
+    registerFormSchema
+  );
+  const queryParams = new URL(request.url).searchParams;
 
-    const response = await db.insert(users).values(formData)
-    return json({response, status: 200})
-  };
+  const amount = queryParams.get("amount") ? queryParams.get("amount") : null;
+  const months = queryParams.get("months") ? queryParams.get("months") : null;
+
+  if (errors) {
+    return {
+      errors,
+      status: 400,
+    };
+  }
+
+  const response = await db
+    .insert(users)
+    .values({...formData, creditAmount: amount, creditMonths: months });
+  return json({ response, status: 200 });
+};
 
 export default function Index() {
   return (
