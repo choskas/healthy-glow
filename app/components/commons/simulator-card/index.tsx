@@ -1,35 +1,19 @@
 import { useSearchParams } from "@remix-run/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import useRegister from "~/components/landing/hooks/useRegister";
 import {
   Card,
   CardContent,
 } from "~/components/ui/card";
 import { Slider } from "~/components/ui/slider";
 import { APR } from "~/constants";
+import { LandingContext } from "~/context/landing";
 import { getMonthlyPayment } from "~/utils/commons";
 import { formatMoney } from "~/utils/commons/formatters";
 
 const SimulatorCard = () => {
-  const [searchParams, setSearchParams] =  useSearchParams()
-  
-  const [amount, setAmount] = useState([0]);
-  const [months, setMonths] = useState([0])
-
-
-  const onChangeAmountSlider = (value: number[]) => {
-    setSearchParams(searchParams => {
-        searchParams.set("amount", value[0].toString());
-        return searchParams;
-      });
-    setAmount(value);
-  };
-  const onChangeLimitSlider = (value: number[]) => {
-    setSearchParams(searchParams => {
-        searchParams.set("months", value[0].toString());
-        return searchParams;
-      });
-    setMonths(value);
-  };
+  const {onClickGetItNow, onChangeAmountSlider, onChangeLimitSlider} = useRegister()
+  const {amount, months} = useContext(LandingContext)
 
   return (
     <Card className="md:w-2/3 w-full py-[24px]">
@@ -85,11 +69,8 @@ const SimulatorCard = () => {
         <p className="mt-[24px] text-[10px] text-left">* Aproximado mensual</p>
         <p className="text-[10px] text-left">Tasa Fija Anual Simple: {APR}%.</p>
         <button
-            id="navAction"
-            onClick={() => {
-              const button = document.getElementById("register-button");
-              button?.click();
-            }}
+            id="register-button"
+            onClick={onClickGetItNow}
             className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-[24px] py-4 px-8 shadow focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
           >
             Solicitalo ahora

@@ -11,6 +11,7 @@ import {
 } from "@remix-run/react";
 import { Toaster } from "./components/ui/toaster";
 import NavBar from "./components/commons/NavBar";
+import Footer from "./components/landing/Footer";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -33,6 +34,7 @@ export default function App() {
         <Scripts />
         <LiveReload />
         <Toaster />
+        <Footer />
       </body>
     </html>
   );

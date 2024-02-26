@@ -1,7 +1,9 @@
 import { useNavigate } from "@remix-run/react";
+import useRegister from "../landing/hooks/useRegister";
 
 const NavBar = () => {
   const navigate = useNavigate()
+  const { onClickGetItNow } = useRegister()
   return (
     <nav id="header" className="fixed w-full z-30 top-0 text-white">
       <div className="w-full container mx-auto flex flex-wrap items-center justify-start p-0 mt-0 py-2">

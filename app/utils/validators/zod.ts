@@ -2,6 +2,7 @@ import { ZodError, ZodSchema } from "zod";
 
 export const validateAction = async (request: Request, schema: ZodSchema) => {
     const body = Object.fromEntries( await request.formData())
+
     try {
     const formData = schema.parse(body)
     return {

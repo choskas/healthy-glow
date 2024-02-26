@@ -1,4 +1,8 @@
-import { Form as RemixForm, useActionData, useParams, useSearchParams} from "@remix-run/react";
+import {
+  Form as RemixForm,
+  useActionData,
+  useNavigation,
+} from "@remix-run/react";
 import {
   Form,
   FormControl,
@@ -9,29 +13,20 @@ import {
 } from "../../ui/form";
 import { Input } from "../../ui/input";
 import { RegisterActionData } from "./types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { registerFormSchema } from "~/utils/forms-schemas/landing";
+import { useContext } from "react";
+import { LandingContext } from "~/context/landing";
+import useRegister from "../hooks/useRegister";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const RegisterForm = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
-    const form = useForm<z.infer<typeof registerFormSchema>>({
-        resolver: zodResolver(registerFormSchema),
-        defaultValues: {
-          name: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          doctorCode: "",
-        },
-      });
+  const { months, amount } = useContext(LandingContext);
+  const navigation = useNavigation();
+  const { form } = useRegister();
+  const actionData = useActionData<RegisterActionData>();
 
-  const actionData = useActionData<RegisterActionData>()
   return (
-    <RemixForm method="post"  className="space-y-8" id="register-form">
-    <Form {...form}>
-   
+    <RemixForm method="post" className="space-y-8" id="register-form">
+      <Form {...form}>
         <FormField
           control={form.control}
           name="name"
@@ -41,7 +36,9 @@ const RegisterForm = () => {
               <FormControl>
                 <Input placeholder="" {...field} />
               </FormControl>
-              <FormMessage>{actionData?.errors && actionData.errors[field.name]}</FormMessage>
+              <FormMessage>
+                {actionData?.errors && actionData.errors[field.name]}
+              </FormMessage>
             </FormItem>
           )}
         />
@@ -54,7 +51,9 @@ const RegisterForm = () => {
               <FormControl>
                 <Input placeholder="" {...field} />
               </FormControl>
-              <FormMessage>{actionData?.errors && actionData.errors[field.name]}</FormMessage>
+              <FormMessage>
+                {actionData?.errors && actionData.errors[field.name]}
+              </FormMessage>
             </FormItem>
           )}
         />
@@ -67,7 +66,9 @@ const RegisterForm = () => {
               <FormControl>
                 <Input placeholder="" {...field} />
               </FormControl>
-              <FormMessage>{actionData?.errors && actionData.errors[field.name]}</FormMessage>
+              <FormMessage>
+                {actionData?.errors && actionData.errors[field.name]}
+              </FormMessage>
             </FormItem>
           )}
         />
@@ -80,7 +81,9 @@ const RegisterForm = () => {
               <FormControl>
                 <Input placeholder="" {...field} />
               </FormControl>
-              <FormMessage>{actionData?.errors && actionData.errors[field.name]}</FormMessage>
+              <FormMessage>
+                {actionData?.errors && actionData.errors[field.name]}
+              </FormMessage>
             </FormItem>
           )}
         />
@@ -93,20 +96,27 @@ const RegisterForm = () => {
               <FormControl>
                 <Input placeholder="" {...field} />
               </FormControl>
-              <FormMessage>{actionData?.errors && actionData.errors[field.name]}</FormMessage>
+              <FormMessage>
+                {actionData?.errors && actionData.errors[field.name]}
+              </FormMessage>
             </FormItem>
           )}
         />
+        <input type="hidden" name="creditMonths" value={months[0].toString()} />
+        <input type="hidden" name="creditAmount" value={amount[0].toString()} />
         <div className="flex justify-end">
           <button
             type="submit"
-            className="mx-auto lg:mx-0 hover:underline text-white bg-black font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+            disabled={navigation.state === "submitting"}
+            className="mx-auto flex items-center lg:mx-0 hover:underline text-white bg-black font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
           >
+            {navigation.state === "submitting" && (
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            )}
             Enviar
           </button>
         </div>
-
-    </Form>
+      </Form>
     </RemixForm>
   );
 };

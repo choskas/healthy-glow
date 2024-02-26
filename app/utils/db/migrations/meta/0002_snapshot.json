@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "c91c5394-8cfe-49b1-8bcc-c19cab635021",
-  "prevId": "54b59a7f-8dc9-428e-8467-0626a83097e8",
+  "id": "5b22f420-e9bb-4b95-9746-ae8afb283d82",
+  "prevId": "c91c5394-8cfe-49b1-8bcc-c19cab635021",
   "tables": {
     "users": {
       "name": "users",
@@ -69,7 +69,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "CURRENT_DATE"
+          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {

@@ -1,7 +1,7 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { ColumnDef } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { CustomTable } from "~/components/commons/CustomTable";
 import { RegisteredUserT } from "~/components/landing/main-section/types";
 import { Button } from "~/components/ui/button";
@@ -10,6 +10,7 @@ import { Label } from "~/components/ui/label";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import db from "~/utils/db";
 import { users } from "~/utils/db/schema";
+import { formatFromDate, formatMoney } from "~/utils/commons/formatters";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   const body = Object.fromEntries(await request.formData());
@@ -22,6 +23,9 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
         email: users.email,
         phone: users.phone,
         doctorCode: users.doctorCode,
+        creditAmount: users.creditAmount,
+        creditMonths: users.creditMonths,
+        createdAt: users.createdAt
       })
       .from(users);
     return { status: 200, results };
@@ -50,6 +54,34 @@ const columns: ColumnDef<RegisteredUserT>[] = [
     accessorKey: "doctorCode",
     header: "Médico",
   },
+  {
+    accessorKey: "creditMonths",
+    header: "Plazo",
+  },
+  {
+    accessorKey: "creditAmount",
+    header: "Monto",
+    cell: (row) => {
+      const amount = formatMoney(Number(row.renderValue()), true);
+      return (
+        <div className="flex- items-center">
+          <span>{amount}</span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Fecha de registro",
+    cell: (row) => {
+      const value = formatFromDate(new Date(row.getValue() as string))
+      return (
+        <div className="flex- items-center">
+          <span>{value}</span>
+        </div>
+      );
+    },
+  },
 ];
 
 const Users = () => {
@@ -57,6 +89,7 @@ const Users = () => {
     status: number;
     results?: RegisteredUserT[];
   }>();
+
   const navigation = useNavigation();
   const [isValid, setIsValid] = useState(false);
 

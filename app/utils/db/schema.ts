@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const users = sqliteTable("users", {
@@ -8,5 +9,6 @@ export const users = sqliteTable("users", {
     phone: text("phone").notNull(),
     doctorCode: text("doctor_code").notNull(),
     creditMonths: text("credit_months"),
-    creditAmount: text("credit_amount")
+    creditAmount: text("credit_amount"),
+    createdAt: integer("created_at").default(sql`CURRENT_TIMESTAMP`),
   });

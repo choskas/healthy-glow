@@ -14,4 +14,6 @@ export const registerFormSchema = z.object({
     .regex(/^\d+$/, "Solo puede contener números")
     .min(4, "El código es de minimo 4 digitos")
     .max(5, "El código es inválido"),
+  creditMonths: z.string(),
+  creditAmount: z.string()
 });

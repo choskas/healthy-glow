@@ -1,30 +1,17 @@
 // @ts-nocheck
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogTrigger,
 } from "../../ui/dialog";
 import RegisterForm from "./RegisterForm";
-import { useActionData } from "@remix-run/react";
-import { useToast } from "~/components/ui/use-toast";
 import SimulatorCard from "~/components/commons/simulator-card";
+import { LandingContext } from "~/context/landing";
 
 const MainSection = () => {
-  const actionData = useActionData<RegisterActionData>()
-  const { toast } = useToast()
-  const [isOpen, setIsOpen] = useState(false)
-  useEffect(() => {
-    if (actionData?.status === 200) {
-      setIsOpen(false)
-      toast({
-        title: "Tu información se ha enviado.",
-        description: "Pronto nos pondremos en contacto contigo.",
-       
-      })
-    }
-  }, [actionData?.status])
+  const { isOpen, setIsOpen } = useContext(LandingContext)
+
   
   return (
     <div className="gradient">
@@ -41,11 +28,6 @@ const MainSection = () => {
               Frase para atraer gente :v Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </p>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger asChild>
-                <button onClick={() => setIsOpen(!isOpen)} id="register-button" className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out hidden">
-                  Solicitalo ahora
-                </button>
-              </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogDescription >
                   Llena los datos de este formulario y pronto nos contactaremos
