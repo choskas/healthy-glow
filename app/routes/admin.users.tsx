@@ -13,6 +13,7 @@ import { users } from "~/utils/db/schema";
 import { formatFromDate, formatMoney } from "~/utils/commons/formatters";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
+  try {
   const body = Object.fromEntries(await request.formData());
 
   if (body.password === "admin123") {
@@ -30,6 +31,9 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       .from(users);
     return { status: 200, results };
   }
+} catch (error) {
+  console.log(error, 'eririerjskhjdahjks')
+}
   return { status: 401 };
 };
 
